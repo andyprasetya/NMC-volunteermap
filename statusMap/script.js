@@ -170,7 +170,7 @@ $('#userlayers li').click(function() {
     $("#totalEdits").html("Total Edits: " + gotTotalEdits);
     $("#since").html("Volunteer since: " + gotDate);
     //testing nesting using d3
-    d3.json("./data/" + url + ".json", function(json) {
+    d3.json("./data_10062016/" + url + ".json", function(json) {
       var stateName = d3.nest()
         .key(function(d, i) {
           return d.properties.NAME;
@@ -293,7 +293,7 @@ $('#searchBoxBtn').click(function() {
     $("#totalEdits").html("Total Unique Edits: " + gotTotalEdits);
     $("#since").html("Volunteer since: " + gotDate);
     //testing nesting using d3
-    d3.json("./data/" + url + ".json", function(json) {
+    d3.json("./data_10062016/" + url + ".json", function(json) {
       var stateName = d3.nest()
         .key(function(d, i) {
           return d.properties.NAME;
