@@ -269,7 +269,7 @@ $('#searchBoxBtn').click(function() {
   if ($('#earnedBadges li').length) {
     $('#earnedBadges').empty();
   }
-  $.getJSON("./data/" + url + ".json", function(data) {
+  $.getJSON("./data_10062016/" + url + ".json", function(data) {
     geojson = L.geoJson(data, {
       pointToLayer: function(feature, latlgn) {
         return L.circleMarker(latlgn, Style(feature)).bindPopup("<a href='" + feature.properties.link + "' target='_blank'>Point Information</a>");
