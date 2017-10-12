@@ -75,16 +75,19 @@ h2:after {
   font-size: 25
 }
 #img{
-	image-orientation: url('https://imgur.com/9wBtVNL');
+	image-orientation: url("./assets/img/Main_point2.png");
 	float:left;
 	padding-bottom: 0px;
 	padding-right: 0px;
 	margin-left: inherit
 }
-#clusterpoints{
-  background-position: 0px -106px;
-  padding-top: 5px;
-  padding-right:15px;  	  
+
+#clusterImage{
+  background: url('../img/Main_point2.png') no-repeat 0 0;;
+  width: 35px;
+  height: 46px;
+  color: #ffffff;
+  display: inline-block;  
 }
 .markers-legend {
   background: url('../plugins/leaflet-extra-markers/css/images/markers_default.png') no-repeat 0 0;
