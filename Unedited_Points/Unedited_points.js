@@ -36,7 +36,9 @@ var imagery = L.tileLayer.wms("http://basemap.nationalmap.gov/arcgis/services/US
 
 var national = L.layerGroup([imageryTopo,usdaNAIP]);
 var usda = L.layerGroup([nationalMap, usdaNAIP]);
-
+var targetId;
+var feature;
+var properties;
 var needsChecked = 0;
 var needsReviewed = 0;
 var finshed = 0;
@@ -123,7 +125,7 @@ var featureLayer = new L.esri.clusteredFeatureLayer({
             }
           },
           onEachFeature: function(feature, layer){
-            if(feature.properties.EDITSTATUS === 0){ 
+            if(feature.properties.EDITSTATUS === 0){
               needsChecked++;
               $('#tobecheckedCounter').text(" (" + needsChecked + " points)");
             } else if (feature.properties.EDITSTATUS === 1){
@@ -133,28 +135,33 @@ var featureLayer = new L.esri.clusteredFeatureLayer({
               finshed++;
               $('#finishedCounter').text(" (" + finshed  + " points)")
             }
-            layer.bindPopup(feature.properties.NAME + '<hr> <a href="https://edits.nationalmap.gov/tnmcorps/?loc=' + feature.geometry.coordinates[1] + "," + feature.geometry.coordinates[0] + ",15"+ '" target=_blank style="color:#fffbfb;text-align:center">Link to point.</a>');}
-}); 
-
-		var southWest = L.latLng(14.581656, -169.354212),
+           //layer.bindPopup(feature.properties.NAME + '<hr> <a href="https://edits.nationalmap.gov/tnmcorps/?loc=' + feature.geometry.coordinates[1] + "," + feature.geometry.coordinates[0] + ",15"+ '" target=_blank style="color:#fffbfb;text-align:center">Link to point.</a>');
+		if(feature.properties.OBJECTID === targetId){
+		var popup = L.popup().setLatLng([feature.geometry.coordinates[1]+0.00005, feature.geometry.coordinates[0]])
+		.setContent(feature.properties.NAME + '<hr> <a href="https://edits.nationalmap.gov/tnmcorps/?loc=' + feature.geometry.coordinates[1] + "," + feature.geometry.coordinates[0] + ",15"+ '" target=_blank style="color:#fffbfb;text-align:center">Link to point.</a>').openOn(map);
+		}
+		}
+		});                                          
+	
+var southWest = L.latLng(14.581656, -169.354212),
 			northEast = L.latLng(661.492973, 174.987991),
 			bounds = L.latLngBounds(southWest, northEast);
 		//The below code generates a random number//
 function myFunction() {
 	getRandomFeature().then(function(test) {
-		console.log("Mug Man! : ",test)
+		/*console.log("Mug Man! : ",test)
 		console.log("Map Man :" , map)
-		console.log("LAYER MAN :" , featureLayer)
-		map.setView([test[0].geometry.y, test[0].geometry.x],13)
+		console.log("LAYER MAN :" , featureLayer)*/
+		map.setView([test[0].geometry.y, test[0].geometry.x],18)
+		targetId =test[0].attributes.OBJECTID;
+		console.log(featureLayer.getFeature(testid));
 	});
 }
-
 function getRandomFeature(){
-  return new Promise(function(resolve, reject) {
+	return new Promise(function(resolve, reject) {
     let query = new L.esri.Tasks.query({
        url: "https://edits.nationalmap.gov/arcgis/rest/services/TNMCorps/TNMCorps_Map_Challenge/MapServer/0" // Or whatever service you want
     });
-    let testId = 0;
     query.where("EDITSTATUS in ('0', '1')")
     query.ids(function(error, featureCollection, response){
         if(featureCollection.length > 0){
@@ -172,6 +179,12 @@ function getRandomFeature(){
     })
   })
 }
+var map = L.map('map',{
+	layers: [national,usda],
+	'maxBounds': bounds 
+}) .setView([40.63, -77.84], 7);
+
+featureLayer.addTo(map);
 
 /*
 var map = L.map('map', {
@@ -190,13 +203,6 @@ var basemap = L.map('basemap',{
 	'maxBounds': bounds
 }) .setView([40.63, -77.84], 7);
 */
-
-var map = L.map('map',{
-	layers: [national,usda],
-	'maxBounds': bounds 
-}) .setView([40.63, -77.84], 7);
-
-featureLayer.addTo(map);
 
 //zoom custom position
 /*
